@@ -11,4 +11,9 @@ public class HelloController {
         return "hello everybody";
     }
 
+    @GetMapping("/java")
+    public String java() {
+        return "java spring";
+    }
+
 }
