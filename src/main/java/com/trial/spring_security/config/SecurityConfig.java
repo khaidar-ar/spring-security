@@ -1,14 +1,13 @@
 package com.trial.spring_security.config;
 
-import java.util.List;
+import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import com.trial.spring_security.entity.User;
-import com.trial.spring_security.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 import lombok.AllArgsConstructor;
 
@@ -17,14 +16,13 @@ import lombok.AllArgsConstructor;
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("john doe")
-                .password("{noop}12345")
-                .authority("READ")
-                .build();
-        List<UserDetails> users = List.of(user);
-        return new UserService(users);
+    public UserDetailsService userDetailsService(DataSource datasource) {
+        return new JdbcUserDetailsManager(datasource);
     }
+
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    // return new BCryptPasswordEncoder();
+    // }
 
 }
