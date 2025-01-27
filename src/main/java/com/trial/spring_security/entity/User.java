@@ -10,12 +10,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -25,10 +27,11 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private String authority;
+    private Integer enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(()->authority);
+        return List.of(() -> authority);
     }
 
 }
