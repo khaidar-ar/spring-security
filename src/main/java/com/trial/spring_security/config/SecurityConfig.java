@@ -1,9 +1,14 @@
 package com.trial.spring_security.config;
 
+import java.util.List;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import com.trial.spring_security.entity.User;
+import com.trial.spring_security.service.UserService;
 
 import lombok.AllArgsConstructor;
 
@@ -11,16 +16,15 @@ import lombok.AllArgsConstructor;
 @Configuration
 public class SecurityConfig {
 
-    private final CustomAuthProvider customAuthProvider;
-
-    SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.httpBasic(Customizer.withDefaults());
-        http.authenticationProvider(customAuthProvider);
-        http.authorizeHttpRequests(
-                c -> {
-                    c.requestMatchers("/java").authenticated();
-                    c.requestMatchers("/hello").permitAll();
-                });
-        return http.build();
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.builder()
+                .username("john doe")
+                .password("{noop}12345")
+                .authority("READ")
+                .build();
+        List<UserDetails> users = List.of(user);
+        return new UserService(users);
     }
+
 }
