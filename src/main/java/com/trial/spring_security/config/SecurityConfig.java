@@ -1,36 +1,25 @@
 package com.trial.spring_security.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import lombok.AllArgsConstructor;
+import com.trial.spring_security.filter.AuthLoggingFilter;
+import com.trial.spring_security.filter.RequestValidationFilter;
 
-@AllArgsConstructor
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsService userDetailsService(DataSource datasource) {
-        return new JdbcUserDetailsManager(datasource);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        Map<String, PasswordEncoder> encoder = new HashMap<>();
-        encoder.put("bcrypt", new BCryptPasswordEncoder());
-        // encoder.put("scypt", new SCryptPasswordEncoder(1, 1, 1, 1, 1));
-        return new DelegatingPasswordEncoder("bcrypt", encoder);
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.addFilterBefore(
+                new RequestValidationFilter(),
+                BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthLoggingFilter(), BasicAuthenticationFilter.class)
+                .authorizeHttpRequests(c -> c.anyRequest().permitAll());
+        return http.build();
     }
 
 }
