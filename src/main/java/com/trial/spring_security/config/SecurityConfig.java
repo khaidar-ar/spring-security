@@ -7,6 +7,9 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.trial.spring_security.security.OnAuthFailureHandler;
+import com.trial.spring_security.security.OnAuthSuccessHandler;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
+    private final OnAuthSuccessHandler onAuthSuccessHandler;
+    private final OnAuthFailureHandler onAuthFailureHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,7 +37,10 @@ public class SecurityConfig {
         // }
         // });
         // })
-        http.formLogin(Customizer.withDefaults())
+        // http.formLogin(Customizer.withDefaults())
+        http.formLogin(login -> login.successHandler(onAuthSuccessHandler)
+                .failureHandler(onAuthFailureHandler))
+                .httpBasic(Customizer.withDefaults())
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(c -> c.anyRequest().authenticated());
         return http.build();
