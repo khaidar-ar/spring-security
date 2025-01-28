@@ -25,10 +25,12 @@ public class PasswordConfig {
                 List.of(User.builder()
                         .username("user")
                         .password(passwordEncoder().encode("12345"))
+                        .authority("WRITE")
                         .build(),
                         User.builder()
                                 .username("john")
                                 .password(passwordEncoder().encode("password"))
+                                .authority("READ")
                                 .build()));
     }
 
