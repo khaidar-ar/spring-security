@@ -24,6 +24,6 @@ public class OnAuthSuccessHandler implements AuthenticationSuccessHandler {
             response.sendRedirect("/hello");
         else
             response.sendRedirect("/errors");
-    }
+        }
 
 }
