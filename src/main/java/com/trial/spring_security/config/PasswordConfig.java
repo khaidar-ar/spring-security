@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.trial.spring_security.entity.Authority;
 import com.trial.spring_security.entity.User;
 import com.trial.spring_security.service.UserDetailsServiceImpl;
 
@@ -25,12 +26,23 @@ public class PasswordConfig {
                 List.of(User.builder()
                         .username("user")
                         .password(passwordEncoder().encode("12345"))
-                        .authority("WRITE")
+                        // .role("USER")
+                        .authority(List.of(Authority.builder()
+                                .name("ADMIN")
+                                .roles(List.of("CREATE", "DELETE")).build(),
+                                Authority.builder()
+                                        .name("USER")
+                                        .roles(List.of("WRITE")).build()))
                         .build(),
                         User.builder()
                                 .username("john")
                                 .password(passwordEncoder().encode("password"))
-                                .authority("READ")
+                                .authority(List.of(Authority.builder()
+                                        .name("USER")
+                                        .roles(List.of("WRITE")).build(),
+                                        Authority.builder()
+                                                .name("ADMIN")
+                                                .roles(List.of("CREATE")).build()))
                                 .build()));
     }
 
