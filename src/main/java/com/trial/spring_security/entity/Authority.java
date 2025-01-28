@@ -1,5 +1,9 @@
 package com.trial.spring_security.entity;
 
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,11 +16,17 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "authorities")
-public class Authority {
+public class Authority implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String username;
-    private String authority;
+    private String name;
+    private List<String> roles;
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + this.name;
+    }
+
 }
