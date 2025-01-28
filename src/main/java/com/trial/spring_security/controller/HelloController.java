@@ -21,4 +21,9 @@ public class HelloController {
         return "java spring";
     }
 
+    @GetMapping("/errors")
+    public String error() {
+        return "authentication unsuccessfull";
+    }
+
 }
