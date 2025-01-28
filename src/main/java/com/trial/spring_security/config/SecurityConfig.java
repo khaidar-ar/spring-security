@@ -24,25 +24,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // http.httpBasic(c -> {
-        // c.realmName("CUSTOM_ENTRY_POINT");
-        // c.authenticationEntryPoint(new AuthenticationEntryPoint() {
-
-        // @Override
-        // public void commence(HttpServletRequest request, HttpServletResponse
-        // response,
-        // AuthenticationException authException) throws IOException, ServletException {
-        // response.addHeader("message", "custom entry point");
-        // response.sendError(HttpStatus.UNAUTHORIZED.value());
-        // }
-        // });
-        // })
-        // http.formLogin(Customizer.withDefaults())
         http.formLogin(login -> login.successHandler(onAuthSuccessHandler)
                 .failureHandler(onAuthFailureHandler))
                 .httpBasic(Customizer.withDefaults())
                 .authenticationProvider(authenticationProvider)
-                .authorizeHttpRequests(c -> c.anyRequest().authenticated());
+                .authorizeHttpRequests(c -> c.anyRequest().hasAnyAuthority("ROLE_ADMIN"));
         return http.build();
     }
 
