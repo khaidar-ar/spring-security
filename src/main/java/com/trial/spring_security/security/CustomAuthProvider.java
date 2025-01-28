@@ -11,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 @Component
 public class CustomAuthProvider implements AuthenticationProvider {
@@ -25,16 +27,16 @@ public class CustomAuthProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         UserDetails user = userDetailsService.loadUserByUsername(name);
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(password, user, user.getAuthorities());
+            return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
         } else {
+            log.error("unauthorized user");
             throw new BadCredentialsException("unauthorized user");
         }
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'supports'");
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
 }
