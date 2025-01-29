@@ -1,29 +1,32 @@
 package com.trial.spring_security.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.List;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.trial.spring_security.service.CustomService;
+
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@AllArgsConstructor
 @Slf4j
-@Controller
+@RestController
 public class HelloController {
 
-    @GetMapping("/")
+    private final CustomService customService;
+
+    @GetMapping("/hello")
     public String hello() {
         log.info("request from root");
-        return "main.html";
+        return "========================\n" + customService.getDetails();
     }
 
-    @PostMapping("/test")
-    @CrossOrigin("http://localhost:8080")
-    @ResponseBody
-    public String java() {
-        log.info("request from test");
-        return "test endpoint";
+    @GetMapping("/jobs/{name}")
+    public List<String> job(@PathVariable String name) {
+        log.info("request from job");
+        return customService.getJobs(name);
     }
-
 }
