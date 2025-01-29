@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,14 +17,9 @@ public class HelloController {
         return "hello " + auth.getName();
     }
 
-    @GetMapping("/java")
+    @PostMapping("/hello")
     public String java() {
-        return "java spring";
-    }
-
-    @GetMapping("/all")
-    public String all() {
-        return "permit all users";
+        return "Hello from post method";
     }
 
 }
