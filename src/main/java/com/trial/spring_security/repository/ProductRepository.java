@@ -10,6 +10,13 @@ import com.trial.spring_security.domain.Product;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @PostFilter("filterObject.owner == authentication.name")
-    List<Product> findByNameContains(String txString);
+    // deprecated
+    // because SecurityEvaluationContextExtension class is no longer used in spring
+    // 3.x.x
+    // @Query("""
+    // SELECT p from Product WHERE p.name LIKE %:txt%
+    // AND p.owner = ?#{authentication.name}
+    // """)
+    List<Product> findByNameContains(String txt);
 
 }
