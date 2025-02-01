@@ -1,15 +1,15 @@
 package com.trial.spring_security.domain;
 
-import java.util.List;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class Employee {
+@AllArgsConstructor
+public class Product {
+
     private String name;
-    private List<String> jobs;
-    private List<String> roles;
+    private String owner;
 
 }
