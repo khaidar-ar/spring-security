@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.trial.spring_security.domain.Product;
+import com.trial.spring_security.repository.ProductRepository;
 import com.trial.spring_security.service.CustomService;
 import com.trial.spring_security.service.ProductService;
 
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HelloController {
 
     private final CustomService customService;
-    private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @GetMapping("/hello")
     public String hello() {
@@ -36,13 +37,9 @@ public class HelloController {
         return customService.getJobs(name);
     }
 
-    @GetMapping("/products")
-    public List<Product> sellProduct() {
-        List<Product> products = new ArrayList<>();
-        products.add(new Product("book", "john"));
-        products.add(new Product("beer", "paul"));
-        products.add(new Product("car", "john"));
-        return productService.sellProducts(products);
+    @GetMapping("/products/{txt}")
+    public List<Product> sellProduct(@PathVariable String txt) {
+        return productRepository.findByNameContains(txt);
     }
 
 }
